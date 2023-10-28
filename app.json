@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "react_native_travel",
+    "slug": "react_native_travel",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "demo"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.dilnazzzzz.react_native_travel"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e60cbec8-3023-42fc-a15f-75405f669d80"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e60cbec8-3023-42fc-a15f-75405f669d80"
+    }
+  }
+}

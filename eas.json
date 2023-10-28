@@ -1,0 +1,13 @@
+{
+  "cli": {
+    "version": ">= 5.5.0"
+  },
+  "build": {
+    "preview": {
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {}
+  }
+}
