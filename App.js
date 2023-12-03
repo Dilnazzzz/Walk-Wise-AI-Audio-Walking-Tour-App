@@ -14,6 +14,8 @@ import ItemScreen from './screens/ItemScreen';
 import Profile from './screens/Profile';
 import Map from './screens/Map';
 import MainContainer from './screens/MainContainer';
+import EditProfile from './screens/EditProfile';
+import TourScreen from './screens/TourScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,8 @@ export default function App() {
             <Stack.Screen name="Map" component={Map} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="ItemScreen" component={ItemScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="TourScreen" component={TourScreen} />
             </>)
             :
             <Stack.Screen name="HomeScreen" component={HomeScreen} />

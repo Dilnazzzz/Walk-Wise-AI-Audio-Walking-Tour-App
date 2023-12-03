@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, Image, ScrollView, TouchableOpacity, Activity
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useNavigation } from '@react-navigation/native';
-import { Avatar, NotFound } from '../assets';
+import { NotFound } from '../assets';
 import { FontAwesome } from '@expo/vector-icons';
 import ItemCardContainer from '../components/itemCardContainer';
 import { getPlacesData } from '../api';
@@ -50,14 +50,14 @@ const Discover = () => {
                     fetchDetails={true}
                     onPress={(data, details = null) => {
                         // 'details' is provided when fetchDetails = true
-                        console.log(details?.geometry?.viewport);
+                        // console.log(details?.geometry?.viewport);
                         setBl_lat(details?.geometry?.viewport?.southwest?.lat)
                         setBl_lng(details?.geometry?.viewport?.southwest?.lng)
                         setTr_lat(details?.geometry?.viewport?.northeast?.lat)
                         setTr_lng(details?.geometry?.viewport?.northeast?.lng)
                     }}
                     query={{
-                        key: 'KEY',
+                        key: 'AIzaSyDYLrlDeteNJ9ND8kr7umLFz6KTX5stq7g',
                         language: 'en',
                     }}
                 />

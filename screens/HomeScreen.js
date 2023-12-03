@@ -66,7 +66,7 @@ const HomeScreen = () => {
         </Text>
       </View>
 
-      <View className="relative border-[#00BCC9] rounded-xl items-center justify-center shadow-lg mt-4 ">
+      <View className="relative border-[#00BCC9] rounded-xl items-center justify-center shadow-lg mt-8 pt-4 ">
         <KeyboardAvoidingView behavior='padding' >
           <TextInput value={email} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}
             className="flex-row items-center rounded-3xl w-72 py-1 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[25px] font-semibold" >
@@ -90,7 +90,7 @@ const HomeScreen = () => {
                   animation={"pulse"}
                   pulse="ease-in-out"
                   iterationCount={"infinite"}
-                  className="flex-row items-center rounded-3xl w-72 py-1 px-4 shadow-lg justify-center bg-[#00BCC9]">
+                  className="flex-row items-center rounded-3xl w-60 py-1 px-4 shadow-lg justify-center bg-[#00BCC9]">
                   <Text className="text-gray-50 text-[30px] font-semibold">
                     Log In
                   </Text>
@@ -99,8 +99,8 @@ const HomeScreen = () => {
 
               <TouchableOpacity 
               onPress={signUp}
-              className="flex-row items-center justify-center space-x-2 pt-6">
-                <Text className="text-[#3C6072] text-[20px] font-bold"> Register Now </Text>
+              className="flex-row items-center justify-center space-x-2 pt-2">
+                <Text className="text-[#3C6072] text-[20px] font-bold"> Create a new account </Text>
               </TouchableOpacity>
             </>
           )}
