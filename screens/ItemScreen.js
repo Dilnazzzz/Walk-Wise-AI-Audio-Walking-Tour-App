@@ -1,32 +1,60 @@
 import { View, Text, SafeAreaView, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../FirebaseConfig';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
+import { AntDesign } from '@expo/vector-icons';
 
 const ItemScreen = ({ route }) => {
     const navigation = useNavigation();
     const data = route?.params?.param;
     const name = data?.name
+    const [status, setStatus] = useState();
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
         });
-    }, []);
-
+        getDoc(doc(FIRESTORE_DB, "saved", name)).then(docSnap => {
+            if (docSnap.exists()) {
+                // console.log(docSnap.data());
+                setStatus("heart");
+            } else {
+                // console.log("Document does not exist")
+                setStatus("hearto");
+            };
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []
+    );
 
     const save = () => {
-        addDoc(collection(FIRESTORE_DB, "saved"), {
-            userID: FIREBASE_AUTH.currentUser.uid,
-            place: name
-        }).then(() => {
-            alert("Saved!")
-        }).catch((error) => {
-            alert(error.message);
-        });;
+        // if it is saved already, unsave
+        if (status === "heart") {
+            setStatus("hearto");
+            deleteDoc(doc(FIRESTORE_DB, "saved", name))
+                .then(() => {
+                    alert("Deleted!")
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            return;
+        } else {
+            setStatus("heart");
+            setDoc(doc(FIRESTORE_DB, "saved", name), {
+                userID: FIREBASE_AUTH.currentUser.uid,
+                place: name
+            }).then(() => {
+                alert("Saved!")
+            }).catch((error) => {
+                alert(error.message);
+            })
+            return;
+        };
 
     }
 
@@ -48,7 +76,8 @@ const ItemScreen = ({ route }) => {
                     <View className="absolute flex-row inset-x-0 top-5 justify-end px-6">
 
                         <TouchableOpacity onPress={save} className="w-10 h-10 rounded-md items-center justify-center bg-[#06B2BE]">
-                            <FontAwesome5 name="heartbeat" size={24} color="#fff" />
+                            {/* <FontAwesome5 name="heartbeat" size={24} color="#fff" /> */}
+                            <AntDesign name={status} size={24} color="#fff" />
                         </TouchableOpacity>
                     </View>
 

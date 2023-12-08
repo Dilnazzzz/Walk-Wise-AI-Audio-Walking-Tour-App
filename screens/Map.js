@@ -1,39 +1,104 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, ScrollView, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { MapPlaceholder, NotFound } from '../assets';
-import { collection, getDocs } from 'firebase/firestore';
-import { FIREBASE_AUTH, FIRESTORE_DB } from '../FirebaseConfig';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { FIREBASE_APP, FIREBASE_AUTH, FIRESTORE_DB } from '../FirebaseConfig';
+// import { FIREBASE_APP } from '../FirebaseConfig';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
 const MapScreen = ({ navigation }) => {
-    const [saved, setSaved] = useState([]);
-    const [chosen, setChosen] = useState("square");
+    const [saved, setSaved] = useState([]); // taskitems
+    // const [chosen, setChosen] = useState("square");
+    const [chosenn, setChosenn] = useState({});
     const [selectedPlaces, setSelectedPlaces] = useState([])
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
         })
+        // console.log(selectedPlaces)
+        // setSaved([]);
+        // getDocs(collection(FIRESTORE_DB, "saved")).then(docSnap => {
+        //     let attractions = [];
+        //     docSnap.forEach((doc) => {
+        //         attractions.push({ ...doc.data() })
+        //     });
+        //     setSaved(attractions);
+
+        //     // console.log("Saved Places", attractions);
+        //     // console.log(attractions.length)
+        //     // console.log(saved.length)
+
+        // });
     }, []);
 
-    const updateSaved = () => {
+    // const FIRESTORE_DB = getFirestore(FIREBASE_APP);
+
+    const updateSaved = async () => {
         // to get all the data 
         setSaved([]);
+        setChosenn({});
+        setSelectedPlaces([]);
+        // console.log("updateSaved")
         getDocs(collection(FIRESTORE_DB, "saved")).then(docSnap => {
             let attractions = [];
             docSnap.forEach((doc) => {
                 attractions.push({ ...doc.data() })
             });
             setSaved(attractions);
-
-            console.log("Saved Places", attractions);
-            console.log(attractions.length)
-            console.log(saved.length)
         });
+        // console.log(saved)
 
-        const unique = [...new Set(saved.map(item => item.place))];
-        console.log(unique)
+        saved?.map((data, index) => {
+            // console.log(data, index)
+            setChosenn(chosenn => {return { ...chosenn, [data.place]: "square" }})});
+
+        // console.log("Saved Places", attractions);
+        // console.log(attractions.length)
+        // console.log(saved.length)
+        // console.log(chosenn)
+
+        // const unique = [...new Set(saved.map(item => item.place))];
+        // console.log(unique)
+    }
+
+    const selectPlace = (data) => {
+        setSelectedPlaces(selectedPlaces => [...selectedPlaces, data.place]);
+        // console.log(data.place)
+        // console.log(selectedPlaces)
+    }
+
+    const unselectPlace = (data) => {
+        // selectedPlaces.findIndex(index => index.name === 'data.place')
+        let placesCopy = [...selectedPlaces];
+        // placesCopy.splice(index, 1);
+        placesCopy.splice(selectedPlaces.indexOf(data.place), 1)
+        // console.log(index)
+        setSelectedPlaces(placesCopy);
+        // console.log(selectedPlaces)
+    }
+
+    const updateStatus =  (data, index) => {
+        // console.log(data.place)
+        // console.log(index)
+        if (chosenn[data.place] === "check-square" ) {
+            setChosenn(previousState => {return {...previousState, [data.place]:"square" }});
+
+            // setChosen("square");
+            unselectPlace(data);
+            // console.log("unselected");
+            // console.log(selectedPlaces);
+        } else {
+            // setChosen(chosen => ({ ...chosen, index: "check-square" }));
+            // setChosenn({data: "check-square"})
+            setChosenn(previousState => {return {...previousState, [data.place]:"check-square" }});
+            // setChosen("check-square");
+            selectPlace(data);
+            // console.log("selected");
+            // console.log(selectedPlaces)
+        }
+        // console.log(selectedPlaces)
     }
 
     return (
@@ -52,20 +117,56 @@ const MapScreen = ({ navigation }) => {
                 <View className=" space-y-2 bg-gray-100 rounded-2xl px-4 py-2">
                     {saved?.length > 0 ? (
                         <>
-                            {saved?.map((data, i) => (
-                                <View key={i} className="items-center flex-row space-x-6">
-                                    <TouchableOpacity onPress={() => {
-                                        setChosen(chosen === "square" ? "check-square" : "square");
-                                        setSelectedPlaces([...selectedPlaces, data.place]);
-                                    }} className="flex-row items-center justify-center">
-                                        <Feather name={chosen} size={30} color="black" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity className="flex-row items-center justify-center rounded-md py-2" >
-                                        <Text className="text-#428288 text-[18px] font-bold" > {data.place} </Text>
-                                    </TouchableOpacity>
-                                </View>
+                            {saved?.map((data, index) => {
+                                return (
+                                    <View key={index} className="items-center flex-row space-x-6">
+                                        <Text className="flex-row items-center justify-center rounded-md py-2 px-2 text-#428288 text-[18px] font-bold" > {data.place} </Text>
+                                        
+                                        {/* <TouchableOpacity key={index} onPress={() => {
+                                            // let selectedPlaces = [[]];
+                                            // console.log(index)
+                                            // setChosen(chosenn => ({ ...chosenn, index: "check-square" }));
+                                            // console.log(chosenn)
 
-                            ))}
+                                            // if (selectedPlaces.includes(data.place)) {
+                                            //     setChosen("square");
+                                            //     // let placesCopy = [...selectedPlaces];
+                                            //     // placesCopy.splice(index, 1);
+                                            //     // setSelectedPlaces(placesCopy);
+                                            //     // console.log(selectedPlaces)
+                                            // } else {
+                                            //     setChosen("check-square");
+                                            //     setSelectedPlaces([...selectedPlaces, data.place]);
+                                            //     console.log(selectedPlaces)
+                                            // }
+                                            setChosen(chosen === "square" ? "check-square" : "square");
+                                            setSelectedPlaces([...selectedPlaces, data.place]);
+
+                                            console.log(selectedPlaces)
+                                            console.log(chosen)
+                                            console.log(index) */}
+
+                                            <TouchableOpacity onPress={() => updateStatus(data, index)} className="flex-row items-center justify-center">
+                                            <Feather name={chosenn[data.place]} size={30} color="black" />
+                                        </TouchableOpacity>
+                                    </View>
+
+
+
+                                    // setChosen({...chosen, index:"square"}),
+                                    // <View key={index} className="items-center flex-row space-x-6">
+                                    //     <TouchableOpacity onPress={() => updateStatus(data, index)} className="flex-row items-center justify-center">
+
+                                    //         <Feather name={chosen[index]} size={30} color="black" />
+                                    //         <Text className="flex-row items-center justify-center rounded-md py-2 px-2 text-#428288 text-[18px] font-bold" > {data.place} </Text>
+                                    //     </TouchableOpacity>
+                                    //     <TouchableOpacity className="flex-row items-center justify-center rounded-md py-2" >
+                                    //         <Text className="text-#428288 text-[18px] font-bold" > {data.place} </Text>
+                                    //     </TouchableOpacity>
+                                    // </View>
+
+                                )
+                            })}
                         </>
                     ) : (
                         <>
