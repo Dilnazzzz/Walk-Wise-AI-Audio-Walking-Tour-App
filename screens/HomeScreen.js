@@ -20,24 +20,26 @@ const HomeScreen = () => {
       // console.log(response);
     } catch (error) {
       // console.log(error);
-      alert("Invalid email or password! or Sign up first!")
+      alert("Invalid email or password!")
     } finally {
       setLoading(false);
     }
   }
 
   const signUp = async () => {
-    setLoading(true);
-    try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
-      // console.log(response);
-      alert("You are ready to sign in!")
-    } catch (error) {
-      // console.log(error);
-      alert("Please write your email and password! Then sign in!")
-    } finally {
-      setLoading(false);
-    }
+    navigation.navigate('SignUpScreen')
+
+    // setLoading(true);
+    // try {
+    //   const response = await createUserWithEmailAndPassword(auth, email, password);
+    //   // console.log(response);
+    //   alert("You are ready to sign in!")
+    // } catch (error) {
+    //   // console.log(error);
+    //   alert("Please write your email and password! Then sign in!")
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   useLayoutEffect(() => {
@@ -66,20 +68,21 @@ const HomeScreen = () => {
         </Text>
       </View>
 
-      <View className="relative border-[#00BCC9] rounded-xl items-center justify-center shadow-lg mt-8 pt-4 ">
+      <View className="relative border-[#00BCC9] rounded-xl items-center justify-center shadow-lg mt-8 pt-2 ">
+
         <KeyboardAvoidingView behavior='padding' >
           <TextInput value={email} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}
-            className="flex-row items-center rounded-3xl w-72 py-1 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[25px] font-semibold" >
+            className="flex-row items-center rounded-3xl w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[24px] font-semibold" >
           </TextInput>
           <TextInput value={password} placeholder='Password' secureTextEntry={true} autoCapitalize='none' onChangeText={(text) => setPassword(text)}
-            className="flex-row top-5 items-center rounded-3xl w-72 py-1 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[25px] font-semibold" >
+            className="flex-row top-5 items-center rounded-3xl w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[24px] font-semibold" >
           </TextInput>
 
           {loading ? (
             <ActivityIndicator size="large" color="#00BCC9" />
           ) : (
             <>
-              <TouchableOpacity className="flex-row items-center justify-center space-x-2 pt-6">
+              <TouchableOpacity className="flex-row items-center justify-center space-x-2 pt-6" onPress={() => {navigation.navigate('ResetPasswordScreen')}}>
                 <Text className="text-[#3C6072] text-[15px] font-bold"> Forgot your password? </Text>
               </TouchableOpacity>
 
@@ -97,11 +100,18 @@ const HomeScreen = () => {
                 </Animatable.View>
               </TouchableOpacity>
 
-              <TouchableOpacity 
-              onPress={signUp}
-              className="flex-row items-center justify-center space-x-2 pt-2">
-                <Text className="text-[#3C6072] text-[20px] font-bold"> Create a new account </Text>
+              <TouchableOpacity
+                onPress={signUp}
+                className="flex-row items-center justify-center space-x-2 pt-2">
+                <Text className="text-[#2A2B4B] text-[20px] font-bold"> Create a new account </Text>
               </TouchableOpacity>
+
+              {/* <TouchableOpacity 
+              onPress={() => {navigation.navigate('SignUpScreen')}}
+              className="flex-row items-center justify-center space-x-2 pt-2">
+                <Text className="text-[#2A2B4B] text-[20px] font-bold"> Create a new account </Text>
+              </TouchableOpacity> */}
+
             </>
           )}
 
@@ -122,4 +132,4 @@ const HomeScreen = () => {
   )
 }
 
-export default HomeScreen
+export default HomeScreen;

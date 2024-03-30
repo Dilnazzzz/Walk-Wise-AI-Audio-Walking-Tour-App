@@ -15,6 +15,7 @@ const Discover = () => {
     const [bl_lng, setBl_lng] = useState(null);
     const [tr_lat, setTr_lat] = useState(null);
     const [tr_lng, setTr_lng] = useState(null);
+    const [search, setSearch] = useState("Taipei");
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -32,6 +33,7 @@ const Discover = () => {
             }, 2000);
         });
     }, [bl_lat, bl_lng, tr_lat, tr_lng]);
+    
 
     return (
         <SafeAreaView className="flex-1 bg-white relative">
@@ -46,18 +48,17 @@ const Discover = () => {
             <View className="flex-row items-center bg-white mx-4 rounded-xl py-1 px-4 shadow-lg mt-4">
                 <GooglePlacesAutocomplete
                     GooglePlacesDetailsQuery={{ fields: "geometry" }}
-                    placeholder='Search'
+                    placeholder='What is your current location?'
                     fetchDetails={true}
                     onPress={(data, details = null) => {
-                        // 'details' is provided when fetchDetails = true
-                        // console.log(details?.geometry?.viewport);
                         setBl_lat(details?.geometry?.viewport?.southwest?.lat)
                         setBl_lng(details?.geometry?.viewport?.southwest?.lng)
                         setTr_lat(details?.geometry?.viewport?.northeast?.lat)
                         setTr_lng(details?.geometry?.viewport?.northeast?.lng)
+                        // setSearch(structured_formatting?.main_text)
                     }}
                     query={{
-                        key: 'Key',
+                        key: 'AIzaSyDYLrlDeteNJ9ND8kr7umLFz6KTX5stq7g',
                         language: 'en',
                     }}
                 />
@@ -72,10 +73,6 @@ const Discover = () => {
                     <View>
                         <View className="flex-row items-center justify-between px-4 mt-8">
                             <Text className="text-[#2C7379] text-[28px] font-bold"> Top Attractions </Text>
-                            <TouchableOpacity className="flex-row items-center justify-center space-x-2">
-                                <Text className="text-[#A0C4C7] text-[20px] font-bold"> Explore </Text>
-                                <FontAwesome name="long-arrow-right" size={24} color="#A0C4C7" />
-                            </TouchableOpacity>
                         </View>
                         <View className="px-4 mt-8 flex-row items-center justify-evenly flex-wrap">
                             {mainData?.length > 0 ? (
