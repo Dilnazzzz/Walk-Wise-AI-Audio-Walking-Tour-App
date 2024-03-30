@@ -11,5 +11,5 @@ The app's development involved integrating React Native for cross-platform mobil
 </p>
 
 App Demo link here:
-https://youtu.be/GpExvVVf2uI
+[https://youtu.be/GpExvVVf2uI](https://youtu.be/76GhiZ8wD2k)
 
