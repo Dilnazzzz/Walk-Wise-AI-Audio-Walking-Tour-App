@@ -1,18 +1,45 @@
-# WalkWise AI-Powered Urban Exploration & Engagement App
+# WalkWise — AI Audio Walking Tours
 
-This project introduces an innovative mobile application designed to revolutionize urban exploration by combining AI-powered walking tours with tokenized incentives and community-driven engagement. The app offers a personalized, immersive experience, providing real-time audio narratives and rewards tailored to users’ preferences, pace, and interests, while empowering them to contribute to city improvements.
+Create personalized, AI-generated walking tours from places you select. Discover attractions, save favorites, and generate a tour with a title, overview, and step-by-step guidance. Audio playback and maps make exploring simple and engaging.
 
-The app’s initial release has demonstrated its potential to redefine city exploration. Users can discover local attractions, explore neighborhoods, support small businesses, and participate in urban development initiatives. By integrating AI technologies, the app dynamically adjusts content, ensuring each tour is both engaging and relevant to the user's unique interests. Tokens are earned through active engagement, such as exploring areas, visiting businesses, and contributing to city development projects.
+Demo: https://youtu.be/76GhiZ8wD2k
 
-Currently, the app integrates React Native for cross-platform development and uses APIs like Google Maps and TripAdvisor for location-based services. Firebase manages authentication and database services, ensuring a secure and responsive experience. The project follows Agile methodologies, focusing on continuous user feedback and iterative improvement.
+## Tech
 
-As an MVP, the app serves as the foundation for future features, such as decentralized governance for voting on city initiatives, personalized carbon-tracking rewards, and expanded partnerships with local businesses. This initial release sets the stage for scaling the platform to foster sustainable, interactive, and rewarding urban exploration that supports both community engagement and city improvement.
+- Expo / React Native
+- Firebase Auth & Firestore
+- Google Places Autocomplete
+- TripAdvisor (via RapidAPI)
+- Tailwind (tailwindcss-react-native)
 
-<p align="center">
-<img width="620" alt="Screenshot 2024-03-30 at 12 17 15 PM" src="https://github.com/Dilnazzzz/Walk-Wise-AI-Audio-Walking-Tour-App/assets/76237763/ac2166ce-cd09-48b3-873e-0720e1da2acc">
-</p>
+## Setup
 
-App Demo link here:
-[https://youtu.be/GpExvVVf2uI](https://youtu.be/76GhiZ8wD2k)
+1. Install: `yarn` (or `npm install`)
+2. Create environment variables (Expo inlines any `EXPO_PUBLIC_` values):
+   - `EXPO_PUBLIC_FIREBASE_API_KEY`
+   - `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN`
+   - `EXPO_PUBLIC_FIREBASE_PROJECT_ID`
+   - `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET`
+   - `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+   - `EXPO_PUBLIC_FIREBASE_APP_ID`
+   - `EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID`
+   - `EXPO_PUBLIC_RAPIDAPI_KEY`
+   - `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY`
+   - `EXPO_PUBLIC_API_BASE_URL` (your local API URL, e.g. http://localhost:3000)
+3. Run: `yarn start`
 
+Security: Keep private API keys on the server. Use the local API for OpenAI requests.
 
+## Local API
+
+- Start local API: `yarn api` (requires `OPENAI_API_KEY` in your shell env)
+- Set `EXPO_PUBLIC_API_BASE_URL=http://localhost:3000`
+- Endpoint: `POST /api/generateTour` → returns `{ title, overview, guidance, stops[] }`.
+
+## Security Rules
+
+See `firestore.rules` for recommended Firestore rules:
+
+- Users can read/write their own profile at `users/{uid}`.
+- Users can read/write their own tours at `users/{uid}/tours/{tourId}`.
+- All other access is denied by default.

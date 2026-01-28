@@ -1,18 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import * as React from 'react';
-import { View, Text, Button, Image, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, TextInput } from 'react-native';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  TextInput,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../FirebaseConfig';
 import { Avatar } from '../assets';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Firestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const EditProfile = () => {
   const navigation = useNavigation();
-  const id = FIREBASE_AUTH.currentUser.uid;
-  const userDocRef = doc(FIRESTORE_DB, "users", id);
+  const uid = FIREBASE_AUTH.currentUser?.uid;
+  const userDocRef = uid ? doc(FIRESTORE_DB, 'users', uid) : null;
   const [user, setUser] = useState({});
   const [name, setName] = useState(null);
   const [personalInfo, setPersonalInfo] = useState(null);
@@ -20,84 +28,83 @@ const EditProfile = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
-    })
+    });
   }, []);
 
   useEffect(() => {
-    const getUser = async () => {
+    const load = async () => {
+      if (!userDocRef) return;
       const snap = await getDoc(userDocRef);
-      setUser({ id, ...snap.data() })
-    }
-    getUser();
-    setName(user.fullName);
-    setPersonalInfo(user.description);
-    console.log(user);
-    console.log(name)
-    console.log(personalInfo)
+      const u = { id: uid, ...(snap.data() || {}) };
+      setUser(u);
+      setName(u.fullName || '');
+      setPersonalInfo(u.description || '');
+    };
+    load();
   }, []);
 
   const saveInfo = () => {
-    console.log(name);
-    console.log(personalInfo);
-
-    setDoc(doc(FIRESTORE_DB, "users", FIREBASE_AUTH.currentUser.uid), {
+    setDoc(doc(FIRESTORE_DB, 'users', FIREBASE_AUTH.currentUser.uid), {
       // if name is null, then use the original name
       fullName: name,
-      description: personalInfo
-    }).then(() => {
-      navigation.goBack();
-      // navigation.navigate('ProfileScreen');
-
-      alert("Info saved");
-    }).catch((error) => {
-      alert(error.message);
+      description: personalInfo,
     })
-  }
+      .then(() => {
+        navigation.goBack();
+        // navigation.navigate('ProfileScreen');
 
+        alert('Info saved');
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <ScrollView style={styles.container}
+      <ScrollView
+        style={styles.container}
         contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+      >
         <Image source={Avatar} style={styles.userImg} />
 
         <View className="relative border-[#00BCC9] rounded-xl items-center justify-center shadow-lg mt-4 pt-2">
-          <KeyboardAvoidingView behavior='padding' >
+          <KeyboardAvoidingView behavior="padding">
             <Text style={styles.userName}>Your Full Name</Text>
 
             <TextInput
               value={name}
               placeholder={user.fullName}
-              autoCapitalize='none'
+              autoCapitalize="none"
               onChangeText={(text) => setName(text === null ? user.fullName : text)}
               className="flex-row items-center rounded-3xl w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[20px] font-semibold"
-            >
-            </TextInput>
-          {/* <TextInput value={email} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}
+            />
+            {/* <TextInput value={email} placeholder='Email' autoCapitalize='none' onChangeText={(text) => setEmail(text)}
                         className="flex-row top-5 items-center rounded-3xl w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[24px] font-semibold" >
                     </TextInput>
                     <TextInput value={password} placeholder='Password' secureTextEntry={true} autoCapitalize='none' onChangeText={(text) => setPassword(text)}
                         className="flex-row top-10 items-center rounded-3xl w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[24px] font-semibold" >
                     </TextInput> */}
-          <Text style={styles.userName}>
-            About You
-          </Text>
-          <TextInput value={personalInfo} placeholder={user.description} multiline={true} autoCapitalize='none' onChangeText={(text) => setPersonalInfo(text === null ? user.description : text)}
-            className="flex-row items-center rounded-3xl h-40 w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[20px] font-semibold" >
-          </TextInput>
-        </KeyboardAvoidingView>
-      </View>
-      <View style={styles.userBtnWrapper}>
-        {/* <TouchableOpacity style={styles.userBtn} onPress={() => { navigation.goBack() }}> */}
-        <TouchableOpacity style={styles.userBtn} onPress={saveInfo}>
-          <Text style={styles.userBtnTxt}>Save Changes</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-    </SafeAreaView >
-
-
+            <Text style={styles.userName}>About You</Text>
+            <TextInput
+              value={personalInfo}
+              placeholder={user.description}
+              multiline
+              autoCapitalize="none"
+              onChangeText={(text) => setPersonalInfo(text === null ? user.description : text)}
+              className="flex-row items-center rounded-3xl h-40 w-72 py-2 px-4 shadow-lg justify-center text-[#3C6072] bg-white text-[20px] font-semibold"
+            />
+          </KeyboardAvoidingView>
+        </View>
+        <View style={styles.userBtnWrapper}>
+          {/* <TouchableOpacity style={styles.userBtn} onPress={() => { navigation.goBack() }}> */}
+          <TouchableOpacity style={styles.userBtn} onPress={saveInfo}>
+            <Text style={styles.userBtnTxt}>Save Changes</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

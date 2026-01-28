@@ -1,0 +1,10 @@
+node_modules
+.expo
+android
+ios
+dist
+build
+.vercel
+yarn.lock
+package-lock.json
+

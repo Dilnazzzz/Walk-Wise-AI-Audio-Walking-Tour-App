@@ -1,0 +1,9 @@
+.env
+node_modules
+.expo
+dist
+build
+android
+ios
+yarn-error.log
+
