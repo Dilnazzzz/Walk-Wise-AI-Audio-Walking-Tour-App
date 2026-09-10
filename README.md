@@ -1,5 +1,7 @@
 # WalkWise — AI Audio Walking Tours
 
+![CI](https://github.com/Dilnazzzz/walkwise/actions/workflows/ci.yml/badge.svg)
+
 Create personalized, AI-generated walking tours from places you select. Discover attractions, save favorites, and generate a tour with a title, overview, and step-by-step guidance. Audio playback and maps make exploring simple and engaging.
 
 Demo: https://youtu.be/76GhiZ8wD2k
